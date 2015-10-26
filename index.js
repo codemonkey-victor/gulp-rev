@@ -40,32 +40,26 @@ function getManifestFile(opts, cb) {
 	});
 }
 
+/**
+ * 2015-10-26
+ * 处理文件名，不做实质修复文件名，只添加一个revHash属性，用于url加版本号：  cmcm.com/style.css?v=a93jfs
+ * @return {[type]} [description]
+ */
 function transformFilename(file) {
 	// save the old path for later
 	file.revOrigPath = file.path;
 	file.revOrigBase = file.base;
 	file.revHash = revHash(file.contents);
 
-	file.path = modifyFilename(file.path, function (filename, extension) {
-		var extIndex = filename.indexOf('.');
+	// file.path = modifyFilename(file.path, function (filename, extension) {
+	// 	var extIndex = filename.indexOf('.');
 
-		filename = extIndex === -1 ?
-			revPath(filename, file.revHash) :
-			revPath(filename.slice(0, extIndex), file.revHash) + filename.slice(extIndex);
+	// 	filename = extIndex === -1 ?
+	// 		revPath(filename, file.revHash) :
+	// 		revPath(filename.slice(0, extIndex), file.revHash) + filename.slice(extIndex);
 
-		return filename + extension;
-	});
-}
-
-/**
- * 处理文件名，不做实质修复文件名，只添加一个revHash属性，用于url加版本号：  cmcm.com/style.css?v=a93jfs
- * @return {[type]} [description]
- */
-function transformFilenameJustAddHash(){
-	// save the old path for later
-	file.revOrigPath = file.path;
-	file.revOrigBase = file.base;
-	file.revHash = revHash(file.contents);
+	// 	return filename + extension;
+	// });
 }
 
 var plugin = function () {
@@ -91,7 +85,7 @@ var plugin = function () {
 		}
 
 		var oldPath = file.path;
-		// transformFilename(file);
+		transformFilename(file);
 		transformFilenameJustAddHash(file);
 		pathMap[oldPath] = file.revHash;
 
