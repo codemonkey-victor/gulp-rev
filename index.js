@@ -57,6 +57,17 @@ function transformFilename(file) {
 	});
 }
 
+/**
+ * 处理文件名，不做实质修复文件名，只添加一个revHash属性，用于url加版本号：  cmcm.com/style.css?v=a93jfs
+ * @return {[type]} [description]
+ */
+function transformFilenameJustAddHash(){
+	// save the old path for later
+	file.revOrigPath = file.path;
+	file.revOrigBase = file.base;
+	file.revHash = revHash(file.contents);
+}
+
 var plugin = function () {
 	var sourcemaps = [];
 	var pathMap = {};
@@ -80,7 +91,8 @@ var plugin = function () {
 		}
 
 		var oldPath = file.path;
-		transformFilename(file);
+		// transformFilename(file);
+		transformFilenameJustAddHash(file);
 		pathMap[oldPath] = file.revHash;
 
 		cb(null, file);
