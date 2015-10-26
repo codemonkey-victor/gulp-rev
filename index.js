@@ -86,7 +86,6 @@ var plugin = function () {
 
 		var oldPath = file.path;
 		transformFilename(file);
-		transformFilenameJustAddHash(file);
 		pathMap[oldPath] = file.revHash;
 
 		cb(null, file);
